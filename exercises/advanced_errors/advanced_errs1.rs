@@ -7,8 +7,6 @@
 // Make this code compile! Execute `rustlings hint advanced_errs1` for
 // hints :)
 
-// I AM NOT DONE
-
 use std::num::ParseIntError;
 use std::str::FromStr;
 
@@ -24,6 +22,19 @@ impl From<CreationError> for ParsePosNonzeroError {
     fn from(e: CreationError) -> Self {
         // TODO: complete this implementation so that the `?` operator will
         // work for `CreationError`
+        match e {
+            CreationError::Zero => ParsePosNonzeroError::Creation(CreationError::Zero),
+            CreationError::Negative => ParsePosNonzeroError::Creation(CreationError::Negative),
+        }
+    }
+}
+
+
+impl From<ParseIntError> for ParsePosNonzeroError {
+    fn from(e: ParseIntError) -> Self {
+        match e {
+            _ => ParsePosNonzeroError::ParseInt (e),
+        }
     }
 }
 
@@ -63,7 +74,6 @@ impl PositiveNonzeroInteger {
 #[cfg(test)]
 mod test {
     use super::*;
-
     #[test]
     fn test_parse_error() {
         // We can't construct a ParseIntError, so we have to pattern match.
@@ -95,4 +105,5 @@ mod test {
         assert!(x.is_ok());
         assert_eq!(PositiveNonzeroInteger::from_str("42"), Ok(x.unwrap()));
     }
+    
 }
